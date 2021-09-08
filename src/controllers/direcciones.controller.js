@@ -1,4 +1,5 @@
-const model = require('../models/categorias.model');
+const model = require('../models/direcciones.model');
+
 const controller = {};
 
 controller.listar = async (req, res) => {
@@ -14,10 +15,12 @@ controller.listar = async (req, res) => {
 		});
 	}
 };
+
 controller.crear = async (req, res) => {
 	try {
 		const datos = {
-			nombre: req.body.nombre,
+			direccion: req.body.direccion,
+			id_usuario: req.body.id_usuario,
 		};
 		await model.crear(datos);
 		res.json({
@@ -32,30 +35,31 @@ controller.crear = async (req, res) => {
 	}
 };
 
-controller.actualizar = async (req, res) => {
+controller.obtenerDirecciones = async (req, res) => {
 	try {
-		const id = req.params.id;
-		const datos = {
-			nombre: req.body.nombre,
-		};
-		await model.actualizar(datos, id);
+		const resultados = await model.obtenerDirecciones(req.params.id);
 		res.json({
-			mensaje: 'Elemento actualizado correctamente',
-			error: false,
+			datos: resultados,
 		});
 	} catch (error) {
 		res.json({
-			mensaje: 'Ha ocurrido un error contacte con el admin',
+			mensaje: 'Ha ocurrido un error, contacte con el admin',
 			error: true,
 		});
 	}
 };
 
-controller.obtenerCategoria = async (req, res) => {
+controller.actualizar = async (req, res) => {
 	try {
-		const resultados = await model.obtenerCategoria(req.params.id);
+		const id = req.params.id;
+		const datos = {
+			direccion: req.body.direccion,
+			id_usuario: req.body.id_usuario,
+		};
+		await model.actualizar(datos, id);
 		res.json({
-			datos: resultados,
+			mensaje: 'Elemento actualizado correctamente',
+			error: false,
 		});
 	} catch (error) {
 		res.json({
@@ -75,7 +79,7 @@ controller.eliminar = async (req, res) => {
 		});
 	} catch (error) {
 		res.json({
-			mensaje: 'Ha ocurrido un error contacte con el admin',
+			mensaje: 'Ha ocurrido un error, contacte con el admin',
 			error: true,
 		});
 	}

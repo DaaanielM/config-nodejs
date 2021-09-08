@@ -1,4 +1,5 @@
-const model = require('../models/categorias.model');
+const model = require('../models/ofertas.model');
+
 const controller = {};
 
 controller.listar = async (req, res) => {
@@ -9,15 +10,18 @@ controller.listar = async (req, res) => {
 		});
 	} catch (error) {
 		res.json({
-			mensaje: 'Ha ocurrido un error contacte con el admin',
+			mensaje: 'Ha ocurrido un error, contacte con el admin',
 			error: true,
 		});
 	}
 };
+
 controller.crear = async (req, res) => {
 	try {
 		const datos = {
+			imagen: req.body.imagen,
 			nombre: req.body.nombre,
+			descripcion: req.body.descripcion,
 		};
 		await model.crear(datos);
 		res.json({
@@ -26,7 +30,20 @@ controller.crear = async (req, res) => {
 		});
 	} catch (error) {
 		res.json({
-			mensaje: 'Ha ocurrido un error contacte con el admin',
+			mensaje: 'Ha ocurrido un error, contacte con el admin',
+			error: true,
+		});
+	}
+};
+controller.obtenerOferta = async (req, res) => {
+	try {
+		const resultados = await model.obtenerOferta(req.params.id);
+		res.json({
+			datos: resultados,
+		});
+	} catch (error) {
+		res.json({
+			mensaje: 'Ha ocurrido un error, contacte con el admin',
 			error: true,
 		});
 	}
@@ -36,26 +53,14 @@ controller.actualizar = async (req, res) => {
 	try {
 		const id = req.params.id;
 		const datos = {
+			imagen: req.body.imagen,
 			nombre: req.body.nombre,
+			descripcion: req.body.descripcion,
 		};
 		await model.actualizar(datos, id);
 		res.json({
 			mensaje: 'Elemento actualizado correctamente',
 			error: false,
-		});
-	} catch (error) {
-		res.json({
-			mensaje: 'Ha ocurrido un error contacte con el admin',
-			error: true,
-		});
-	}
-};
-
-controller.obtenerCategoria = async (req, res) => {
-	try {
-		const resultados = await model.obtenerCategoria(req.params.id);
-		res.json({
-			datos: resultados,
 		});
 	} catch (error) {
 		res.json({
@@ -75,7 +80,7 @@ controller.eliminar = async (req, res) => {
 		});
 	} catch (error) {
 		res.json({
-			mensaje: 'Ha ocurrido un error contacte con el admin',
+			mensaje: 'Ha ocurrido un error, contacte con el admin',
 			error: true,
 		});
 	}
